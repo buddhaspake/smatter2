@@ -10,6 +10,7 @@ _Can use leaf pages_
     - Citation `str[]`
     - URL `str`
     - Thumbnail `img[]`
+    - Date `date`
 
 ## Publications
 _Does not need leaf pages_
