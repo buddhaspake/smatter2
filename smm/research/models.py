@@ -4,6 +4,7 @@ from wagtail.models import Page
 
 
 class ResearchIndexPage(Page):
+    # Hero image goes here before intro
     intro = RichTextField(blank=True)
 
     def get_context(self, request):
@@ -19,7 +20,15 @@ class ResearchIndexPage(Page):
 
 class ResearchEntry(Page):
     date = models.DateField("Publish date")
-    header = models.CharField(max_length=250)
-    body = RichTextField(blank=True)
+    research_title = models.CharField(max_length=250)
+    description = models.CharField(max_length=2000)
+    citation = models.CharField(max_length=250)
+    url = models.CharField(max_length=250)
 
-    content_panels = Page.content_panels + ["date", "header", "body"]
+    content_panels = Page.content_panels + [
+        "date",
+        "research_title",
+        "description",
+        "citation",
+        "url",
+    ]
