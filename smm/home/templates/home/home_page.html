@@ -1,8 +1,39 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
-    {{ page.body|richtext }}
+
+    <div id="elements">
+        <div class="element-card">
+            <h1>Intent</h1>
+            <p>{{ page.intent }}</p>
+        </div>
+        <div class="element-card">
+            <h1>Methods</h1>
+            <p>{{ page.methods }}</p>
+        </div>
+        <div class="element-card">
+            <h1>Vision</h1>
+            <p>{{ page.vision }}</p>
+        </div>
+    </div>
+
+    <div id="news">
+        <h1>News</h1>
+        {% for entry in featured_news %}
+            {% with entry=entry.specific %}
+                <div class="news-item">
+                    {% image entry.photo max-150x150 %}
+                    <p>{{ entry.caption }}</p>
+                    <p><i>{{ entry.date }}</i></p>
+                    {% if entry.featured %}
+                        <p>[FEATURED]</p>
+                    {% endif %}
+                </div>
+            {% endwith %}
+        {% endfor %}
+    </div>
 {% endblock %}
