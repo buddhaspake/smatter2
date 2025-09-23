@@ -10,9 +10,11 @@
 
     {% for entry in research_entries %}
         {% with entry=entry.specific %}
-            <h2><a href="{% pageurl entry %}">{{ entry.title }}</a></h2>
-            {{ entry.intro }}
-            {{ entry.body|richtext }}
+            <h2><a href="{% pageurl entry %}">{{ entry.research_title }}</a></h2>
+            <div>
+                {{ entry.description }}
+            </div>
+            <p><i>{{ entry.date }}</i></p>
         {% endwith %}
     {% endfor %}
 
