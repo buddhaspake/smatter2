@@ -1,6 +1,9 @@
 # DATA MODEL
 Drives design for the app
 
+Legacy lives [here](https://s2m-deylab.in/).
+
+
 ## Research
 _Can use leaf pages_
 - Hero image `img`
@@ -37,6 +40,15 @@ _Can be part of the site datamodel_
 - Alumni
     - Photo `img`
     - Year `int`
+
+> Proposition:
+> Use common model with fields as:
+> - Full name `str`
+> - Description `RichText` _(Multiple paras)_
+> - Photo `img`
+> - Year (Blank, unless alumni)
+> 
+> Then, use Photo and Year for alumni, and all fields otherwise
 
 
 ## Join
