@@ -1,10 +1,15 @@
 from django.db import models
 from wagtail.fields import RichTextField
 from wagtail.models import Page
+from wagtail.images import get_image_model_string
 
 
 class ResearchIndexPage(Page):
-    # Hero image goes here before intro
+    hero = models.ForeignKey(
+        get_image_model_string(),
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     intro = RichTextField(blank=True)
 
     def get_context(self, request):
@@ -15,7 +20,7 @@ class ResearchIndexPage(Page):
         ctx["research_entries"] = entries
         return ctx
 
-    content_panels = Page.content_panels + ["intro"]
+    content_panels = Page.content_panels + ["hero", "intro"]
 
 
 class ResearchEntry(Page):
