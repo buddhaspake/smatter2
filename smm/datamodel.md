@@ -44,6 +44,7 @@ _Can be part of the site datamodel_
 > Proposition:
 > Use common model with fields as:
 > - Full name `str`
+> - Role `str`
 > - Description `RichText` _(Multiple paras)_
 > - Photo `img`
 > - Year (Blank, unless alumni)
