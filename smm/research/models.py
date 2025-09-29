@@ -1,5 +1,6 @@
 from django.db import models
 from wagtail.models import Page
+from wagtail.fields import RichTextField
 from base.models import BasePage
 
 
@@ -17,14 +18,14 @@ class ResearchIndexPage(BasePage):
 class ResearchEntry(Page):
     date = models.DateField("Publish date")
     research_title = models.CharField(max_length=250)
-    description = models.CharField(max_length=2000)
-    citation = models.CharField(max_length=250)
-    url = models.CharField(max_length=250)
+    body = RichTextField()
+    citation = models.CharField(max_length=250, blank=True)
+    url = models.URLField(blank=True)
 
     content_panels = Page.content_panels + [
         "date",
         "research_title",
-        "description",
+        "body",
         "citation",
         "url",
     ]

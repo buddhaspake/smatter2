@@ -8,23 +8,10 @@ from wagtail.images import get_image_model_string
 from wagtail.images.blocks import ImageChooserBlock
 
 
-# Reusable snippets
-class MemberRole(models.TextChoices):
-    PRINCIPAL = "PI", "Principal Investigator"
-    PHD = "PH", "PhD Scholar"
-    MASTER = "MS", "Master's Student"
-    ALUMNI = "AL", "Alumni"
-
-
 # Member snippet to show under Team
 @register_snippet
 class Member(models.Model):
     full_name = models.CharField(max_length=50)
-    role = models.CharField(
-        max_length=2,
-        choices=MemberRole.choices,
-        default=MemberRole.PHD
-    )
     description = RichTextField(blank=True)
     photo = models.ForeignKey(
         get_image_model_string(),
@@ -37,7 +24,6 @@ class Member(models.Model):
 
     panels = [
         FieldPanel("full_name"),
-        FieldPanel("role"),
         FieldPanel("description"),
         FieldPanel("photo"),
         FieldPanel("year"),
@@ -48,6 +34,7 @@ class Member(models.Model):
         return self.full_name
 
 
+# NewsItem snippet to show under News
 @register_snippet
 class NewsItem(models.Model):
     date = models.DateField("Publish date")
@@ -69,44 +56,19 @@ class NewsItem(models.Model):
     def __str__(self):
         return self.caption
 
-# Base pages
-class BasePage(Page):
-    hero = models.ForeignKey(
-        get_image_model_string(),
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-    )
-    intro = RichTextField(blank=True)
-    
-    content_panels = Page.content_panels + [
-        "hero",
-        "intro",
+
+# Publication snippet to show under Publications
+@register_snippet
+class Publication(models.Model):
+    authors = RichTextField()
+    citation = models.CharField(max_length=500, blank=True)
+    url = models.URLField(max_length=200, blank=True)
+    year = models.IntegerField(blank=True)
+
+    panels = [
+        FieldPanel("authors"),
+        FieldPanel("citation"),
+        FieldPanel("url"),
+        FieldPanel("year"),
     ]
-
-
-class Team(BasePage):
-    scholars = StreamField([
-        ('scholar', SnippetChooserBlock(Member)),
-    ], blank=True)
-    masters = StreamField([
-        ('master', SnippetChooserBlock(Member)),
-    ], blank=True)
-    alumni = StreamField([
-        ('alumnus', SnippetChooserBlock(Member)),
-    ], blank=True)
-
-    content_panels = BasePage.content_panels + [
-        "scholars",
-        "masters",
-        "alumni",
-    ]
-
-
-class Gallery(BasePage):
-    photos = StreamField([
-        ('photo', ImageChooserBlock()),
-    ], blank=True)
-
-    content_panels = BasePage.content_panels + [ "photos" ]
 
