@@ -1,16 +1,9 @@
 from django.db import models
-from wagtail.fields import RichTextField
 from wagtail.models import Page
-from wagtail.images import get_image_model_string
+from base.models import BasePage
 
 
-class ResearchIndexPage(Page):
-    hero = models.ForeignKey(
-        get_image_model_string(),
-        null=True,
-        on_delete=models.SET_NULL,
-    )
-    intro = RichTextField(blank=True)
+class ResearchIndexPage(BasePage):
 
     def get_context(self, request):
         ctx = super().get_context(request)
@@ -19,8 +12,6 @@ class ResearchIndexPage(Page):
         entries = self.get_children().live().order_by('-first_published_at')
         ctx["research_entries"] = entries
         return ctx
-
-    content_panels = Page.content_panels + ["hero", "intro"]
 
 
 class ResearchEntry(Page):
@@ -37,3 +28,4 @@ class ResearchEntry(Page):
         "citation",
         "url",
     ]
+

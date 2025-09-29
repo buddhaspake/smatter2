@@ -48,14 +48,44 @@ class Member(models.Model):
         return self.full_name
 
 
-# Base pages
-class Team(Page):
-    hero = models.ForeignKey(
+@register_snippet
+class NewsItem(models.Model):
+    date = models.DateField("Publish date")
+    caption = models.CharField(max_length=500)
+    photo = models.ForeignKey(
         get_image_model_string(),
         null=True,
         on_delete=models.SET_NULL,
     )
+    featured = models.BooleanField(default=False)
+
+    panels = [
+        FieldPanel("date"),
+        FieldPanel("caption"),
+        FieldPanel("photo"),
+        FieldPanel("featured"),
+    ]
+
+    def __str__(self):
+        return self.caption
+
+# Base pages
+class BasePage(Page):
+    hero = models.ForeignKey(
+        get_image_model_string(),
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     intro = RichTextField(blank=True)
+    
+    content_panels = Page.content_panels + [
+        "hero",
+        "intro",
+    ]
+
+
+class Team(BasePage):
     scholars = StreamField([
         ('scholar', SnippetChooserBlock(Member)),
     ], blank=True)
@@ -66,27 +96,17 @@ class Team(Page):
         ('alumnus', SnippetChooserBlock(Member)),
     ], blank=True)
 
-    content_panels = Page.content_panels + [
-        "hero",
-        "intro",
+    content_panels = BasePage.content_panels + [
         "scholars",
         "masters",
         "alumni",
     ]
 
 
-class Gallery(Page):
-    hero = models.ForeignKey(
-        get_image_model_string(),
-        null=True,
-        on_delete=models.SET_NULL,
-    )
-    intro = RichTextField(blank=True)
+class Gallery(BasePage):
     photos = StreamField([
         ('photo', ImageChooserBlock()),
     ], blank=True)
 
-    content_panels = Page.content_panels + [
-        "hero", "intro", "photos",
-    ]
+    content_panels = BasePage.content_panels + [ "photos" ]
 
