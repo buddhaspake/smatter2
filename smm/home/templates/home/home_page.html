@@ -21,19 +21,4 @@
         </div>
     </div>
 
-    <div id="news">
-        <h1>News</h1>
-        {% for entry in featured_news %}
-            {% with entry=entry.specific %}
-                <div class="news-item">
-                    {% image entry.photo max-150x150 %}
-                    <p>{{ entry.caption }}</p>
-                    <p><i>{{ entry.date }}</i></p>
-                    {% if entry.featured %}
-                        <p>[FEATURED]</p>
-                    {% endif %}
-                </div>
-            {% endwith %}
-        {% endfor %}
-    </div>
 {% endblock %}
