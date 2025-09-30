@@ -2,6 +2,7 @@ from django.db import models
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail.snippets.blocks import SnippetChooserBlock
+from wagtail.admin.panels import FieldPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images import get_image_model_string
 from base.models.snippets import Member, Publication
@@ -35,6 +36,11 @@ class PublicationsPage(BasePage):
 
 
 class TeamPage(BasePage):
+    lead = models.ForeignKey(
+        "Member",
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+    )
     scholars = StreamField([
         ('scholar', SnippetChooserBlock(Member)),
     ], blank=True)
@@ -46,6 +52,7 @@ class TeamPage(BasePage):
     ], blank=True)
 
     content_panels = BasePage.content_panels + [
+        FieldPanel("lead"),
         "scholars",
         "masters",
         "alumni",
