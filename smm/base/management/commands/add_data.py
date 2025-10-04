@@ -35,9 +35,10 @@ def add_images(root_dir: str):
                     file=django_file,
                     title=img_title,
                     description=img_desc,
-                    tags=img_tags,
                 )
                 wt_image.save()
+                for tag in img_tags.split(","):
+                    wt_image.tags.add(tag.strip())
 
 
 def add_publications(root_dir: str):
