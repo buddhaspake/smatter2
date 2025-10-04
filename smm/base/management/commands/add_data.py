@@ -60,15 +60,21 @@ def add_publications(root_dir: str):
 def add_members(root_dir: str):
     df = read_tsv(Path(root_dir) / MEMBERS_FPATH)
     df = df.replace(np.nan, None)
-    member_objs = (
-        Member(
-            full_name = row.full_name,
-            description = row.description,
-            year = row.year,
-            placed_at = row.placed_at,
-        )
-        for row in df.itertuples()
-    )
+    member_objs = []
+    for row in df.itertuples():
+        member_image = None
+        try:
+            member_image = WagtailImage.objects.get(title = row.photo)
+        except (WagtailImage.DoesNotExist, WagtailImage.MultipleObjectsReturned):
+            print(f"No unique image found by title {row.photo}")
+        kwargs = {
+            "full_name": row.full_name,
+            "description": row.description,
+            "photo": member_image,
+            "year": row.year,
+            "placed_at": row.placed_at,
+        }
+        member_objs.append(Member(**kwargs))
     Member.objects.bulk_create(member_objs)
 
 
