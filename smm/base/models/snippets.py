@@ -60,15 +60,20 @@ class NewsItem(models.Model):
 # Publication snippet to show under Publications
 @register_snippet
 class Publication(models.Model):
+    topic = RichTextField()
     authors = RichTextField()
     citation = models.CharField(max_length=500, blank=True)
     url = models.URLField(max_length=200, blank=True)
     year = models.IntegerField(blank=True)
 
     panels = [
+        FieldPanel("topic"),
         FieldPanel("authors"),
         FieldPanel("citation"),
         FieldPanel("url"),
         FieldPanel("year"),
     ]
+
+    def __str__(self):
+        return str(self.topic)
 

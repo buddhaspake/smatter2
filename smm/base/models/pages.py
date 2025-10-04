@@ -28,11 +28,11 @@ class BasePage(Page):
 
 
 class PublicationsPage(BasePage):
-    publications = StreamField([
-        ('publication', SnippetChooserBlock(Publication)),
-    ], blank=True)
 
-    content_panels = BasePage.content_panels + [ "publications" ]
+    def get_context(self, request, *args, **kwargs):
+        ctx = super().get_context(request, *args, **kwargs)
+        ctx["publications"] = Publication.objects.all()
+        return ctx
 
 
 class TeamPage(BasePage):
