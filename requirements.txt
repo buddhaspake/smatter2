@@ -52,6 +52,7 @@ decorator==5.2.1
 defusedxml==0.7.1
     # via
     #   nbconvert
+    #   odfpy
     #   willow
 django==5.2.5
     # via
@@ -193,6 +194,8 @@ notebook-shim==0.2.4
     # via jupyterlab
 numpy==2.3.3
     # via pandas
+odfpy==1.4.1
+    # via -r requirements.in
 openpyxl==3.1.5
     # via wagtail
 packaging==25.0

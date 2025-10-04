@@ -1,29 +1,23 @@
 from pathlib import Path
-import pandas as pd
 import numpy as np
 from django.core.management.base import BaseCommand
 from django.core.files import File
 from wagtail.images.models import Image as WagtailImage
 from base.models.snippets import Publication, Member, NewsItem
+from base.management.cmd_utils import read_ods
 
-
-PUBLICATIONS_FPATH = "datasheets/publications.csv"
-IMAGES_FPATH = "datasheets/images.csv"
-MEMBERS_FPATH = "datasheets/members.csv"
-NEWS_FPATH = "datasheets/news.csv"
-
-
-def read_tsv(filepath: Path):
-    df = pd.read_csv(
-        filepath.resolve(),
-        sep="\t",
-        header=0
-    )
-    return df
+LEGACY_DATA_FPATH = "datasheets/legacy_data.ods"
+PUBLICATIONS_SHEET = "publications"
+IMAGES_SHEET = "images"
+MEMBERS_SHEET = "members"
+NEWS_SHEET = "news"
 
 
 def add_images(root_dir: str):
-    df = read_tsv(Path(root_dir) / IMAGES_FPATH)
+    df = read_ods(
+        Path(root_dir) / LEGACY_DATA_FPATH,
+        sheet_name=IMAGES_SHEET,
+    )
     df = df.fillna("")
     for row in df.itertuples():
         img_title = row.title
@@ -45,7 +39,10 @@ def add_images(root_dir: str):
 
 
 def add_publications(root_dir: str):
-    df = read_tsv(Path(root_dir) / PUBLICATIONS_FPATH)
+    df = read_ods(
+        Path(root_dir) / LEGACY_DATA_FPATH,
+        sheet_name=PUBLICATIONS_SHEET,
+    )
     pub_objs = (
         Publication(
             topic = row.topic,
@@ -59,7 +56,10 @@ def add_publications(root_dir: str):
 
 
 def add_members(root_dir: str):
-    df = read_tsv(Path(root_dir) / MEMBERS_FPATH)
+    df = read_ods(
+        Path(root_dir) / LEGACY_DATA_FPATH,
+        sheet_name=MEMBERS_SHEET,
+    )
     df = df.replace(np.nan, None)
     member_objs = []
     for row in df.itertuples():
@@ -80,7 +80,10 @@ def add_members(root_dir: str):
 
 
 def add_news(root_dir: str):
-    df = read_tsv(Path(root_dir) / NEWS_FPATH)
+    df = read_ods(
+        Path(root_dir) / LEGACY_DATA_FPATH,
+        sheet_name=NEWS_SHEET,
+    )
     df = df.replace(np.nan, None)
     news_objs = []
     for row in df.itertuples():
