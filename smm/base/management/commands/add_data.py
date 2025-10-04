@@ -1,10 +1,13 @@
 from pathlib import Path
 import pandas as pd
 from django.core.management.base import BaseCommand
+from django.core.files import File
+from wagtail.images.models import Image as WagtailImage
 from base.models.snippets import Publication
 
 
 PUBLICATIONS_FPATH = "datasheets/publications.csv"
+IMAGES_FPATH = "datasheets/images.csv"
 
 
 def read_tsv(filepath: Path):
@@ -14,6 +17,27 @@ def read_tsv(filepath: Path):
         header=0
     )
     return df
+
+
+def add_images(root_dir: str):
+    df = read_tsv(Path(root_dir) / IMAGES_FPATH)
+    df = df.fillna("")
+    for row in df.itertuples():
+        img_title = row.title
+        img_desc = row.description
+        img_tags = row.tags
+        img_path = Path(root_dir) / row.filepath
+        if img_path.is_file():
+            with open(img_path, "rb") as imf:
+                # Create Django file, and Wagtail Image
+                django_file = File(imf, name=img_path.name)
+                wt_image = WagtailImage(
+                    file=django_file,
+                    title=img_title,
+                    description=img_desc,
+                    tags=img_tags,
+                )
+                wt_image.save()
 
 
 def add_publications(root_dir: str):
@@ -42,7 +66,7 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
-            "-c", "--clean", 
+            "-c", "--clean",
             help = "Clean existing entries",
             action = "store_true",
         )
@@ -59,6 +83,8 @@ class Command(BaseCommand):
         # Clean existing objects if necessary
         if clean:
             Publication.objects.all().delete()
+            WagtailImage.objects.all().delete()
         # Pre-load new objects
         add_publications(root_dir)
+        add_images(root_dir)
 
