@@ -4,12 +4,13 @@ import numpy as np
 from django.core.management.base import BaseCommand
 from django.core.files import File
 from wagtail.images.models import Image as WagtailImage
-from base.models.snippets import Publication, Member
+from base.models.snippets import Publication, Member, NewsItem
 
 
 PUBLICATIONS_FPATH = "datasheets/publications.csv"
 IMAGES_FPATH = "datasheets/images.csv"
 MEMBERS_FPATH = "datasheets/members.csv"
+NEWS_FPATH = "datasheets/news.csv"
 
 
 def read_tsv(filepath: Path):
@@ -78,6 +79,25 @@ def add_members(root_dir: str):
     Member.objects.bulk_create(member_objs)
 
 
+def add_news(root_dir: str):
+    df = read_tsv(Path(root_dir) / NEWS_FPATH)
+    df = df.replace(np.nan, None)
+    news_objs = []
+    for row in df.itertuples():
+        news_image = None
+        try:
+            news_image = WagtailImage.objects.get(title = row.photo)
+        except (WagtailImage.DoesNotExist, WagtailImage.MultipleObjectsReturned):
+            print(f"No unique image found by title {row.photo}")
+        kwargs = {
+            "date": row.date,
+            "caption": row.caption,
+            "photo": news_image,
+        }
+        news_objs.append(NewsItem(**kwargs))
+    NewsItem.objects.bulk_create(news_objs)
+
+
 class Command(BaseCommand):
     help = "Add curated data to blog"
 
@@ -109,8 +129,10 @@ class Command(BaseCommand):
             Publication.objects.all().delete()
             WagtailImage.objects.all().delete()
             Member.objects.all().delete()
+            NewsItem.objects.all().delete()
         # Pre-load new objects
         add_publications(root_dir)
         add_images(root_dir)
         add_members(root_dir)
+        add_news(root_dir)
 
