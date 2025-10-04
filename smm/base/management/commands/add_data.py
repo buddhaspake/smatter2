@@ -1,13 +1,15 @@
 from pathlib import Path
 import pandas as pd
+import numpy as np
 from django.core.management.base import BaseCommand
 from django.core.files import File
 from wagtail.images.models import Image as WagtailImage
-from base.models.snippets import Publication
+from base.models.snippets import Publication, Member
 
 
 PUBLICATIONS_FPATH = "datasheets/publications.csv"
 IMAGES_FPATH = "datasheets/images.csv"
+MEMBERS_FPATH = "datasheets/members.csv"
 
 
 def read_tsv(filepath: Path):
@@ -55,6 +57,21 @@ def add_publications(root_dir: str):
     Publication.objects.bulk_create(pub_objs)
 
 
+def add_members(root_dir: str):
+    df = read_tsv(Path(root_dir) / MEMBERS_FPATH)
+    df = df.replace(np.nan, None)
+    member_objs = (
+        Member(
+            full_name = row.full_name,
+            description = row.description,
+            year = row.year,
+            placed_at = row.placed_at,
+        )
+        for row in df.itertuples()
+    )
+    Member.objects.bulk_create(member_objs)
+
+
 class Command(BaseCommand):
     help = "Add curated data to blog"
 
@@ -85,7 +102,9 @@ class Command(BaseCommand):
         if clean:
             Publication.objects.all().delete()
             WagtailImage.objects.all().delete()
+            Member.objects.all().delete()
         # Pre-load new objects
         add_publications(root_dir)
         add_images(root_dir)
+        add_members(root_dir)
 

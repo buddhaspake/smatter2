@@ -12,7 +12,7 @@ from wagtail.images.blocks import ImageChooserBlock
 @register_snippet
 class Member(models.Model):
     full_name = models.CharField(max_length=50)
-    description = RichTextField(blank=True)
+    description = RichTextField(blank=True, null=True)
     photo = models.ForeignKey(
         get_image_model_string(),
         blank=True,
