@@ -3,7 +3,8 @@ from django.core.management.base import BaseCommand
 from wagtail.models import Page as WagPage
 from home.models import HomePage
 from base.models.pages import PublicationsPage, TeamPage, GalleryPage
-from base.models.snippets import NewsItem
+from research.models import ResearchIndexPage
+from base.models.snippets import NewsItem, Member
 from base.management.cmd_utils import read_ods
 
 LEGACY_DATA_FPATH = "datasheets/legacy_data.ods"
@@ -49,7 +50,31 @@ def update_homepage(root_dir: str):
     add_update_childpage(homepage, TeamPage, title="Team")
     add_update_childpage(homepage, GalleryPage, title="Gallery")
     add_update_childpage(homepage, PublicationsPage, title="Publications")
+    add_update_childpage(homepage, ResearchIndexPage, title="Research")
     homepage.save()
+
+
+def update_teampage(root_dir: str):
+    team_page = TeamPage.objects.first()
+    df = read_ods(
+        Path(root_dir) / LEGACY_DATA_FPATH,
+        sheet_name=TEAM_PAGE_SHEET,
+    )
+    # Filter names by role
+    lead_name = df[df["role"] == "lead"]["full_name"][0]
+    scholar_names = df[df["role"] == "scholar"]["full_name"]
+    master_names = df[df["role"] == "master"]["full_name"]
+    alumni_names = df[df["role"] == "alumni"]["full_name"]
+    # Collect member objects
+    scholar_mems = Member.objects.filter(full_name__in=scholar_names)
+    master_mems = Member.objects.filter(full_name__in=master_names)
+    alumni_mems = Member.objects.filter(full_name__in=alumni_names)
+    # Update team_page
+    team_page.lead = Member.objects.get(full_name=lead_name)
+    team_page.scholars = [("scholar", m) for m in scholar_mems]
+    team_page.masters = [("master", m) for m in master_mems]
+    team_page.alumni = [("alumnus", m) for m in alumni_mems]
+    team_page.save()
 
 
 class Command(BaseCommand):
@@ -84,4 +109,5 @@ class Command(BaseCommand):
         # Pre-load new objects
         print("Loading new page(s)...") # debug
         update_homepage(root_dir)
+        update_teampage(root_dir)
 
