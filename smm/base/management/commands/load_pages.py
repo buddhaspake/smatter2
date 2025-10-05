@@ -3,13 +3,14 @@ from django.core.management.base import BaseCommand
 from wagtail.models import Page as WagPage
 from home.models import HomePage
 from base.models.pages import PublicationsPage, TeamPage, GalleryPage
-from research.models import ResearchIndexPage
+from research.models import ResearchIndexPage, ResearchEntry
 from base.models.snippets import NewsItem, Member
 from base.management.cmd_utils import read_ods
 
 LEGACY_DATA_FPATH = "datasheets/legacy_data.ods"
 HOMEPAGE_SHEET = "page_home"
 TEAM_PAGE_SHEET = "page_team"
+RESEARCH_PAGE_SHEET = "page_research"
 
 
 def add_update_childpage(parent: WagPage, ChildClass: type[WagPage], **kwargs):
@@ -27,7 +28,7 @@ def add_update_childpage(parent: WagPage, ChildClass: type[WagPage], **kwargs):
         firstborn.save_revision().publish()
 
 
-def update_homepage(root_dir: str):
+def update_home_page(root_dir: str):
     df = read_ods(
         Path(root_dir) / LEGACY_DATA_FPATH,
         sheet_name=HOMEPAGE_SHEET,
@@ -54,7 +55,7 @@ def update_homepage(root_dir: str):
     homepage.save()
 
 
-def update_teampage(root_dir: str):
+def update_team_page(root_dir: str):
     team_page = TeamPage.objects.first()
     df = read_ods(
         Path(root_dir) / LEGACY_DATA_FPATH,
@@ -75,6 +76,29 @@ def update_teampage(root_dir: str):
     team_page.masters = [("master", m) for m in master_mems]
     team_page.alumni = [("alumnus", m) for m in alumni_mems]
     team_page.save()
+
+
+def add_research_entries(root_dir: str):
+    index_page = ResearchIndexPage.objects.first()
+    if index_page is None:
+        raise ValueError(
+            "Please create ResearchIndex page prior to adding entries."
+        )
+    df = read_ods(
+        Path(root_dir) / LEGACY_DATA_FPATH,
+        sheet_name=RESEARCH_PAGE_SHEET,
+    )
+    for row in df.itertuples():
+        entry_page = ResearchEntry(
+            title = row.title,
+            date = row.date,
+            body = row.body,
+            citation = row.citation,
+            url = row.url,
+        )
+        index_page.add_child(instance=entry_page)
+        entry_page.save_revision().publish()
+    index_page.save()
 
 
 class Command(BaseCommand):
@@ -105,9 +129,15 @@ class Command(BaseCommand):
         clean = kwargs["clean"]
         # Clean existing objects if necessary
         if clean:
-            print("Cleaning old page(s)...") # debug
+            ResearchEntry.objects.all().delete()
+            ResearchIndexPage.objects.all().delete()
+            TeamPage.objects.all().delete()
+            PublicationsPage.objects.all().delete()
+            GalleryPage.objects.all().delete()
+            print("Cleaned custom page(s).")
         # Pre-load new objects
-        print("Loading new page(s)...") # debug
-        update_homepage(root_dir)
-        update_teampage(root_dir)
+        update_home_page(root_dir)
+        update_team_page(root_dir)
+        add_research_entries(root_dir)
+        print("Loaded new page(s).")
 
