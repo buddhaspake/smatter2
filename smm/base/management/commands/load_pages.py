@@ -1,5 +1,6 @@
 from pathlib import Path
 from django.core.management.base import BaseCommand
+from wagtail.models import Page as WagPage
 from home.models import HomePage
 from base.models.pages import PublicationsPage, TeamPage, GalleryPage
 from base.models.snippets import NewsItem
@@ -7,6 +8,22 @@ from base.management.cmd_utils import read_ods
 
 LEGACY_DATA_FPATH = "datasheets/legacy_data.ods"
 HOMEPAGE_SHEET = "page_home"
+TEAM_PAGE_SHEET = "page_team"
+
+
+def add_update_childpage(parent: WagPage, ChildClass: type[WagPage], **kwargs):
+    children = list(parent.get_children())
+    has_child = any(
+        isinstance(pg.specific, ChildClass)
+        for pg in children
+    )
+    if not has_child:
+        # Find first instance of custom page
+        firstborn = ChildClass.objects.first()
+        if firstborn is None:
+            firstborn = ChildClass(**kwargs)
+        parent.add_child(instance=firstborn)
+        firstborn.save_revision().publish()
 
 
 def update_homepage(root_dir: str):
@@ -28,6 +45,10 @@ def update_homepage(root_dir: str):
         )
         if news_objs:
             homepage.news.append(("new", news_objs[0]))
+    # Add children
+    add_update_childpage(homepage, TeamPage, title="Team")
+    add_update_childpage(homepage, GalleryPage, title="Gallery")
+    add_update_childpage(homepage, PublicationsPage, title="Publications")
     homepage.save()
 
 
