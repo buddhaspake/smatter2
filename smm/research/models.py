@@ -17,14 +17,12 @@ class ResearchIndexPage(BasePage):
 
 class ResearchEntry(Page):
     date = models.DateField("Publish date")
-    research_title = models.CharField(max_length=250)
     body = RichTextField()
     citation = models.CharField(max_length=250, blank=True)
     url = models.URLField(blank=True)
 
     content_panels = Page.content_panels + [
         "date",
-        "research_title",
         "body",
         "citation",
         "url",
