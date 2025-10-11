@@ -1,0 +1,21 @@
+{% load wagtailcore_tags %}
+
+<table>
+    <caption>
+        Publications from the SMM group
+    </caption>
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Author(s)</th>
+            <th scope="col">Details</th>
+        </tr>
+    </thead>
+    {% for index, publication in publications %}
+        <tr>
+            <td>{{ index }}</td>
+            <td>{{ publication.authors|richtext }}</td>
+            <td>{{ publication.topic|richtext }}</td>
+        </tr>
+    {% endfor %}
+</table> 
