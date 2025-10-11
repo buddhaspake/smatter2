@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
-{% load wagtailimages_tags %}
+{% load snippet_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
@@ -19,6 +19,13 @@
             <h1>Vision</h1>
             <p>{{ page.vision }}</p>
         </div>
+    </div>
+
+    <div id="news">
+        <h2>News</h2>
+        {% for newsitem in page.news %}
+            {% newsitem newsitem.value %}
+        {% endfor %}
     </div>
 
 {% endblock %}

@@ -1,0 +1,7 @@
+{% load wagtailimages_tags %}
+
+<div class="element-card">
+    <h3>{{ self.caption }}</h3>
+    {% image self.photo width-400 %}
+</div>
+
