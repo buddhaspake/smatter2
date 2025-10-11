@@ -29,6 +29,8 @@ class BasePage(Page):
 
 class PublicationsPage(BasePage):
 
+    template = "base/publications_page.html"
+
     def get_context(self, request, *args, **kwargs):
         ctx = super().get_context(request, *args, **kwargs)
         ctx["publications"] = Publication.objects.all()
@@ -36,6 +38,9 @@ class PublicationsPage(BasePage):
 
 
 class TeamPage(BasePage):
+    
+    template = "base/team_page.html"
+
     lead = models.ForeignKey(
         "Member",
         null=True, blank=True,
@@ -60,6 +65,9 @@ class TeamPage(BasePage):
 
 
 class GalleryPage(BasePage):
+
+    template = "base/gallery_page.html"
+    
     photos = StreamField([
         ('photo', ImageChooserBlock()),
     ], blank=True)
