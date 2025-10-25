@@ -8,9 +8,22 @@
     <h1>{{ page.title }}</h1>
 
     <h2>Principal Investigator</h2>
+    {% member page.lead %}
+
     <h2>PhD Scholars</h2>
+    {% for scholar in page.scholars %}
+        {% member scholar.value %}
+    {% endfor %}
+
     <h2>Master Students</h2>
+    {% for master in page.masters %}
+        {% member master.value %}
+    {% endfor %}
+
     <h2>Alumni</h2>
+    {% for alumnus in page.alumni %}
+        {% member alumnus.value %}
+    {% endfor %}
     
 
 {% endblock %}

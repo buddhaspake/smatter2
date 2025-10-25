@@ -1,0 +1,17 @@
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<div class="member--card">
+    {% image self.photo width-150 %}
+    <p class="member--name">{{ self.full_name }}</p>
+    {% if self.description %}
+        <div>{{ self.description|richtext }}</div>
+    {% endif %}
+    {% if self.year %}
+        <p class="member--year">({{ self.year }})</p>
+    {% endif %}
+    {% if self.placed_at %}
+        <p>Working at <i>{{ self.placed_at }}</i></p>
+    {% endif %}
+</div>
+
