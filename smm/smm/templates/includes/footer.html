@@ -1,0 +1,17 @@
+<footer>
+    <p>Soft Matter and Microswimmers</p>
+    {% with main_url=settings.base.NavigationSettings.x_url mailto=settings.base.NavigationSettings.mailto %}
+        {% if main_url or mailto %}
+            <p>
+                {% if main_url %}
+                    Visit our <a href="{{ main_url }}">website</a>.<br />
+                {% endif %}
+                {% if mailto %}
+                    If you are interested to work with us,
+                    email us <a href="mailto:{{ mailto }}?subject=Want to join SMM">here</a>
+                {% endif %}
+            </p>
+        {% endif %}
+    {% endwith %}
+</footer>
+

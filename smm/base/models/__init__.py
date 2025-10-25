@@ -9,3 +9,7 @@ from .snippets import (
     Publication,
     Member,
 )
+from .setting_models import (
+    NavigationSettings,
+)
+
