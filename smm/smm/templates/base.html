@@ -24,6 +24,8 @@
         {% endif %}
 
         {# Global stylesheets #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/fonts.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/smm.css' %}">
 
         {% block extra_css %}
@@ -36,7 +38,9 @@
 
         {% include "includes/header.html" %}
 
+        <main>
         {% block content %}{% endblock %}
+        </main>
 
         {% include "includes/footer.html" %}
 
