@@ -1,0 +1,26 @@
+/* Variants of Poppins */
+/* Regular */
+@font-face {
+    font-family: 'CPoppins';
+    src: url('../fonts/poppins-v24-latin-regular.woff2');
+    font-weight: regular;
+    font-style: normal;
+    font-display: swap;
+}
+/* Italic */
+@font-face {
+    font-family: 'CPoppins';
+    src: url('../fonts/poppins-v24-latin-italic.woff2');
+    font-weight: regular;
+    font-style: italic;
+    font-display: swap;
+}
+/* Bold */
+@font-face {
+    font-family: 'CPoppins';
+    src: url('../fonts/poppins-v24-latin-600.woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
