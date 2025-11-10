@@ -2,13 +2,17 @@
 
 <header>
     {% get_site_root as site_root %}
-    <nav>
-        <p>
-        <a href="{% pageurl site_root %}">Home</a> | 
-        {% for menuitem in site_root.get_children.live.in_menu %}
-            <a href="{% pageurl menuitem %}">{{ menuitem.title }}</a>
-        {% endfor %}
-        </p>
-    </nav>
+    <div class="container">
+        <nav class="nav">
+            <a href="{% pageurl site_root %}" class="boxlink">Home</a>
+            <ul id="main-links" class="hmenu">
+            {% for menuitem in site_root.get_children.live.in_menu %}
+                <li class="hmenu--item">
+                    <a class="boxlink" href="{% pageurl menuitem %}">{{ menuitem.title }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        </nav>
+    </div>
 </header>
 

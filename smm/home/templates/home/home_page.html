@@ -6,26 +6,30 @@
 
 {% block content %}
 
-    <div id="elements">
-        <div class="element-card">
-            <h1>Intent</h1>
-            <p>{{ page.intent }}</p>
-        </div>
-        <div class="element-card">
-            <h1>Methods</h1>
-            <p>{{ page.methods }}</p>
-        </div>
-        <div class="element-card">
-            <h1>Vision</h1>
-            <p>{{ page.vision }}</p>
-        </div>
-    </div>
+    <div class="container">
 
-    <div id="news">
-        <h2>News</h2>
-        {% for newsitem in page.news %}
-            {% newsitem newsitem.value %}
-        {% endfor %}
+        <div id="elements">
+            <div class="element-card">
+                <h1>Intent</h1>
+                <p>{{ page.intent }}</p>
+            </div>
+            <div class="element-card">
+                <h1>Methods</h1>
+                <p>{{ page.methods }}</p>
+            </div>
+            <div class="element-card">
+                <h1>Vision</h1>
+                <p>{{ page.vision }}</p>
+            </div>
+        </div>
+
+        <div id="news">
+            <h2>News</h2>
+            {% for newsitem in page.news %}
+                {% newsitem newsitem.value %}
+            {% endfor %}
+        </div>
+    
     </div>
 
 {% endblock %}

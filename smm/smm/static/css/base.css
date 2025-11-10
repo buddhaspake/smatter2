@@ -1,0 +1,96 @@
+/* Variables */
+:root {
+    --ff: Roboto, Arial, sans-serif;
+    --hff: "CPoppins", Arial, sans-serif;
+
+    --h0: bold 5rem / 0.7em var(--hff); 
+    --h1: bold 1.25rem / 1.4em var(--hff); 
+    --h2: bold 1rem / 1.4em var(--ff); 
+    --p: 1rem / 1.4em var(--ff); 
+    --p2: .875rem / 1.4em var(--ff);
+
+    --gray100: hsl(0, 0%, 100%);
+    --gray70: hsl(0, 0%, 70%);
+    --gray0: hsl(0, 0%, 0%);
+
+    --pri-full: hsl(208, 65%, 36%);
+    --pri-med: hsl(208, 65%, 44%);
+    --pri-light: hsl(208, 65%, 80%);
+}
+
+* {font: var(--p)}
+    
+.title {
+    font: var(--h0)
+}
+h1 {font: var(--h1)}
+h2, h3, h4 {font: var(--h2)}
+
+a {
+    color: currentColor;
+}
+
+/* Outer layout */
+body {
+    display: grid;
+    grid-template-rows: min-content 1fr min-content;
+}
+
+/* Footer styles */
+footer {
+    border-top: 1px dotted;
+}
+
+/* Header styles */
+header {
+    background-color: var(--pri-full);
+    color: var(--gray100);
+}
+    
+/* Navigation styles */
+nav {
+    display: flex;
+    justify-content: space-between;
+    height: inherit;
+    align-items: center;
+}
+
+/* Common styles */
+.container {
+    max-width: 80rem;
+    height: inherit;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1.2rem;
+}
+
+.boxlink {
+    text-decoration: none;
+    height: 100%;
+    padding: 0.6rem;
+}
+
+.boxlink.active {
+    border-bottom: 0.2rem solid var(--gray100); 
+}
+
+.hmenu {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+}
+
+.page--hero {
+    height: 10rem;
+    background-color: var(--pri-full);
+}
+.page--title {
+    text-transform: uppercase;
+    font: var(--h0);
+    color: var(--gray100);
+}
+.btm--align {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}

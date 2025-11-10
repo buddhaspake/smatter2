@@ -5,24 +5,32 @@
 
 {% block content %}
 
-    <h1>{{ page.title }}</h1>
-    <div class="intro">{{ page.intro|richtext }}</div>
 
-    {% for entry in research_entries %}
-        {% with entry=entry.specific %}
-            <h2><a href="{% pageurl entry %}">{{ entry.title }}</a></h2>
-            <div>
-                {{ entry.body|richtext }}
-            </div>
-            <p class="res-entry--citation">
-            {% if entry.url %}
-                <a href="{{entry.url}}">{{ entry.citation }}</a>
-            {% else %}
-                {{ entry.citation }}
-            {% endif %}
-            </p>
-            <p><i>{{ entry.date }}</i></p>
-        {% endwith %}
-    {% endfor %}
+    <section class="page--hero">
+        <div class="container btm--align">
+            <h1 class="page--title">{{ page.title }}</h1>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="intro">{{ page.intro|richtext }}</div>
+
+        {% for entry in research_entries %}
+            {% with entry=entry.specific %}
+                <h2><a href="{% pageurl entry %}">{{ entry.title }}</a></h2>
+                <div>
+                    {{ entry.body|richtext }}
+                </div>
+                <p class="res-entry--citation">
+                {% if entry.url %}
+                    <a href="{{entry.url}}">{{ entry.citation }}</a>
+                {% else %}
+                    {{ entry.citation }}
+                {% endif %}
+                </p>
+                <p><i>{{ entry.date }}</i></p>
+            {% endwith %}
+        {% endfor %}
+    </div>
 
 {% endblock %}

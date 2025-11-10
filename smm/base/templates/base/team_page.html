@@ -5,25 +5,31 @@
 
 {% block content %}
     
-    <h1>{{ page.title }}</h1>
+    <section class="page--hero">
+        <div class="container btm--align">
+            <h1 class="page--title">{{ page.title }}</h1>
+        </div>
+    </section>
 
-    <h2>Principal Investigator</h2>
-    {% member page.lead %}
+    <div class="container">
+        <h2>Principal Investigator</h2>
+        {% member page.lead %}
 
-    <h2>PhD Scholars</h2>
-    {% for scholar in page.scholars %}
-        {% member scholar.value %}
-    {% endfor %}
+        <h2>PhD Scholars</h2>
+        {% for scholar in page.scholars %}
+            {% member scholar.value %}
+        {% endfor %}
 
-    <h2>Master Students</h2>
-    {% for master in page.masters %}
-        {% member master.value %}
-    {% endfor %}
+        <h2>Master Students</h2>
+        {% for master in page.masters %}
+            {% member master.value %}
+        {% endfor %}
 
-    <h2>Alumni</h2>
-    {% for alumnus in page.alumni %}
-        {% member alumnus.value %}
-    {% endfor %}
+        <h2>Alumni</h2>
+        {% for alumnus in page.alumni %}
+            {% member alumnus.value %}
+        {% endfor %}
+    </div>
     
 
 {% endblock %}
